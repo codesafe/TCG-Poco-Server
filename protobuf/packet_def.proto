@@ -1,0 +1,95 @@
+//syntax = "proto2";
+syntax = "proto3";
+
+//package tcgserver;
+
+// packet 정의
+enum GameMsgID
+{
+	MSG_UNKNOWN					= 0;
+	MSG_EVENT_RESULT			= 1;
+	MSG_EVENT_TRANSPOND			= 2;
+	MSG_CLOSE_SOCKET			= 3;
+
+	MSG_STS_NET_INFO			= 50;
+	MSG_STS_HEART_BEAT			= 100;
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	MSG_REQ_LOGIN				= 101;
+	MSG_ACK_LOGIN				= 102;
+	MSG_REQ_LOGOUT				= 103;
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	MSG_REQ_CREATE_ACCOUNT		= 106;
+	MSG_ACK_CREATE_ACCOUNT		= 107;	
+	
+	//////////////////////////////////////////////////////////////////////////////////////	
+	
+	MSG_REQ_SERVER_LIST			= 110;
+	MSG_ACK_SERVER_LIST			= 111;
+
+	MSG_REQ_CREATE_PLAYER		= 120;
+	MSG_ACK_CREATE_PLAYER		= 121;
+
+	MSG_REQ_ENTER_WORLD			= 130;
+	MSG_ACK_ENTER_WORLD			= 131;
+
+	MSG_REQ_MOVE_PLAYER			= 140;		// req move player
+	MSG_ACK_MOVE_PLAYER			= 141;		// response	move player
+
+	//////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////	Packet에 대한 Return Value
+
+// Error 값 정의
+enum RetError
+{
+	RET_ERR_UNKNOWN				= 0;
+	RET_ERR_NOERROR				= 1;
+	
+	RET_ERR_COMMON				= 10;
+	
+	RET_ERR_DB_ACCESS_FAIL		= 100;
+	RET_ERR_DB_WRONG_QUERY		= 101;
+}
+
+enum RetCreateAccount
+{
+	RET_CREATE_SUCCESS			= 0;
+	RET_EXIST_ACCOUNT_FAIL		= 1;
+	RET_UNKONWN_FAIL			= 2;
+}
+
+// Login Result
+enum RetLogin
+{
+	RET_LOGIN_FAIL					= 0;		// 다른 이유로 실패	(Error 참고)
+	RET_LOGIN_SUCCESS				= 1;
+	RET_LOGIN_WRONGPASS				= 2;
+	RET_LOGIN_NEED_CREATE_USER		= 3;		// new user 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// Create Player result
+enum RetCreatePlayer
+{
+	RET_CREATE_PLAYER_FAIL			= 0;		// 다른 이유로 실패	(Error 참고)
+	RET_CREATE_PLAYER_SUCCESS		= 1;
+	RET_CREATE_PLAYER_CONFLICT		= 2;		// Name 중복
+}
+
+// ServerList Result
+enum RetServerList
+{
+	RET_SERVERLIST_FAIL			= 0;		// 다른 이유로 실패	(Error 참고)
+	RET_SERVERLIST_SUCCESS		= 1;
+}
+
+
+
+

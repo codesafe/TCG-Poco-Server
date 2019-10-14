@@ -1,0 +1,36 @@
+//syntax = "proto2";
+//package tcgserver;
+
+syntax = "proto3";
+import "packet_def.proto";
+
+//////////////////////////////////////////////////////////////////	Login
+
+message ReqLogin
+{ 
+	bytes  name = 1;
+    bytes  passwd = 2;
+}
+
+message AckLogin
+{ 
+	RetLogin  result = 1;
+	RetError  error = 2;
+}
+
+//////////////////////////////////////////////////////////////////	Create Account
+
+message ReqCreateAccount
+{
+	string	name = 1;
+	string	passwd = 2;
+}
+
+message AckCreateAccount
+{
+	bool	result = 1;
+}
+
+
+
+
