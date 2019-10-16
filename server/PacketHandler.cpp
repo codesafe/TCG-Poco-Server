@@ -1,8 +1,11 @@
-
+ï»¿
 #include "PacketHandler.h"
 #include "Packet.h"
 #include "SessionManager.h"
 #include "GameSession.h"
+#include "Common/Util.h"
+#include "MySQLSessionPool.h"
+
 
 PacketHandler *PacketHandler::_instance = nullptr;
 
@@ -15,11 +18,11 @@ PacketHandler::~PacketHandler()
 {
 }
 
-// ÀÌ°÷¿¡¼­ ÆĞÅ¶À» Ã³¸®ÇÒ ÇÔ¼öµéÀ» µî·Ï
+// ì´ê³³ì—ì„œ íŒ¨í‚·ì„ ì²˜ë¦¬í•  í•¨ìˆ˜ë“¤ì„ ë“±ë¡
 void PacketHandler::initHandler()
 {
 	this->addtReceiveCallBack(GameMsgID::MSG_REQ_CREATE_ACCOUNT, this, &PacketHandler::onCreateAccountReq);
-	//this->addtReceiveCallBack(GameMsgID::MSG_REQ_LOGIN, this, &PacketHandler::onLoginReq);
+	this->addtReceiveCallBack(GameMsgID::MSG_REQ_LOGIN, this, &PacketHandler::onLoginReq);
 
 	//WorldServer *worldserver = WorldServer::getInstance();
 	//this->AddReceiveCallBack((uint32_t)FBPacket::NET_PACKET::NET_PACKET_MSG_REQ_MOVE_PLAYER, worldserver, &WorldServer::onMove);
@@ -41,7 +44,7 @@ bool PacketHandler::addtReceiveCallBack(const int packetID, const NET_RECEIVE_FU
 	return true;
 }
 
-// ÆĞÅ¶¿¡ ´ëÇÑ ÇÔ¼ö ½ÇÇà
+// íŒ¨í‚·ì— ëŒ€í•œ í•¨ìˆ˜ ì‹¤í–‰
 bool PacketHandler::dispatchPacket(int packetid, char *buf, int buflen, USER_GUID guid)
 {
 	std::map<int, NET_RECEIVE_FUNCTOR_PTR>::iterator it = receiveCallBack.find(packetid);
@@ -52,7 +55,7 @@ bool PacketHandler::dispatchPacket(int packetid, char *buf, int buflen, USER_GUI
 	}
 	else
 	{
-		Application::instance().logger().information("--> Recv Packet GUID : %ld", guid);
+		UTIL::Log("--> Recv Packet GUID : %ld", guid);
 		SessionManager::getInstance()->sendBuffer(guid, packetid, buf, buflen);
 	}
 
@@ -63,6 +66,8 @@ bool PacketHandler::dispatchPacket(int packetid, char *buf, int buflen, USER_GUI
 
 bool PacketHandler::onCreateAccountReq(const char* buf, const int buflen, const USER_GUID& sessionID)
 {
+
+
 	return true;
 }
 
@@ -77,6 +82,52 @@ bool PacketHandler::onLoginReq(const char* buf, const int buflen, const USER_GUI
 	std::string name = login.name();
 	std::string pass = login.passwd();
 
+	//////////////////////////////////////////////////////////////////////////
+
+	std::string querystr = "select * from account where name = ?";
+
+	USER_GUID ret_gsn;
+	std::string ret_name;
+	std::string ret_pass;
+
+	try
+	{
+		Poco::Data::Session sess(MySQLSessionPool::getInstance()->getSessionPool()->get());
+		if (sess.isConnected())
+		{
+			//Packet_LOGIN login;
+			//sess << querystr, into(login), use(name), now;
+			sess << querystr, into(ret_gsn), into(ret_name), into(ret_pass), use(name), now;
+		}
+		else
+			UTIL::Log("*** Connected to DB failed");
+	}
+	catch (ConnectionException& ce)
+	{
+		UTIL::Log(ce.displayText());
+	}
+	catch (StatementException& se)
+	{
+		UTIL::Log(se.displayText());
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	AckLogin ack;
+	if( pass == ret_pass )
+		ack.set_result(RET_LOGIN_SUCCESS);
+	else
+		ack.set_result(RET_LOGIN_WRONGPASS);
+
+	SessionManager::getInstance()->sendProtoBuffer(sessionID, GameMsgID::MSG_ACK_LOGIN, ack);
+
+	// 	int size = ack.ByteSize();
+	// 	char msgData[SOCKET_BUFFER] = { 0, };
+	// 
+	// 	if (!ack.SerializePartialToArray(msgData, size))
+	// 		return false;
+
+	//SessionManager::getInstance()->sendBuffer(sessionID, GameMsgID::MSG_ACK_LOGIN, msgData, size);
 
 	return true;
 }

@@ -22,7 +22,8 @@ public:
 	void onTimeout(TimeoutNotification* pNotification);
 	void onIdle(IdleNotification* pNotification);
 
-	void sendBuffer(int packetID, char *buf, int size);
+	void sendProtoBuffer(int packetid, const google::protobuf::Message& pb);
+	void sendBuffer(int packetid, char *buf, int size);
 
 private:
 	bool	parsePacket();
@@ -43,7 +44,9 @@ private:
 
 	bool		writableAdded;
 	bool		timeoutAdded;
-	USER_GUID	guid;
+
+	USER_GUID		guid;
+	unsigned long	packetSerial;
 };
 
 #endif

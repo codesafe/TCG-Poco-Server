@@ -7,27 +7,24 @@
 
 #include "DataBufferPool.h"
 #include "Packet.h"
+#include "Common/Util.h"
 
 GameSession::GameSession(StreamSocket& socket, SocketReactor& reactor)
-	:_socket(socket)
-	, _reactor(reactor)
-	, writableAdded(false)
-	, timeoutAdded(false)
+	:_socket(socket), _reactor(reactor), writableAdded(false), timeoutAdded(false)
 {
-	Application& app = Application::instance();
-	//app.logger().information("Connection from " + socket.peerAddress().toString());
+	UTIL::Log("--> Connection GUID : %ld : %s", guid, _socket.peerAddress().toString());
 
+	packetSerial = 1;
 	guid = SessionManager::getInstance()->addSession(this);
-	app.logger().information("Connection GUID : %ld", guid);
 
 	recvBuff = DataBufferManager::getInstance()->allocBuffer(0);
 
 	Timespan timeout(10, 0);
 	_reactor.setTimeout(timeout);
 
-	_socket.setNoDelay(false);
-	_socket.setReusePort(true);
-	_socket.setReuseAddress(true);
+ 	_socket.setNoDelay(true);
+ 	_socket.setReusePort(true);
+ 	_socket.setReuseAddress(true);
 
 	// 아래의 Handler는 코드 밑부분에 들어가야 한다.
 	// 핸들러가 등록되자 마자 작동을 하기 때문에 핸들러 등록 아래에서 뭔가를 하면 작동이 이상해지는 경우 있다.
@@ -38,22 +35,11 @@ GameSession::GameSession(StreamSocket& socket, SocketReactor& reactor)
 	if(timeoutAdded)
 		_reactor.addEventHandler(_socket, Observer<GameSession, TimeoutNotification>(*this, &GameSession::onTimeout));
 
-/*
-	DBManager::getInstance()->init("192.168.29.183", 6379);
-	//DBManager::getInstance()->sendCommand("");
-	Poco::Redis::BulkString ret = DBManager::getInstance()->getFromHashTBL("GUID","32");
-
-	if(!ret.isNull())
-		app.logger().information("FROM DB : %s", ret);
-*/
 }
 
 GameSession::~GameSession()
 {
-	Application& app = Application::instance();
-
-	//app.logger().information("Disconnecting " + _socket.peerAddress().toString());
-	app.logger().information("--> Disconnecting GUID : %ld", guid);
+	UTIL::Log("--> Disconnecting GUID : %ld : %s", guid, _socket.peerAddress().toString());
 
 	_reactor.removeEventHandler(_socket, Observer<GameSession, ReadableNotification>(*this, &GameSession::onReadable));
 	_reactor.removeEventHandler(_socket, Observer<GameSession, ShutdownNotification>(*this, &GameSession::onShutdown));
@@ -68,8 +54,8 @@ GameSession::~GameSession()
 
 	SessionManager::getInstance()->disconnnectSession(guid);
 	SessionManager::getInstance()->removeSession(guid);
-
 	DataBufferManager::getInstance()->releaseBuffer(recvBuff);
+
 	recvBuff = nullptr;
 }
 
@@ -77,8 +63,6 @@ void GameSession::onReadable(Poco::Net::ReadableNotification* pNotification)
 {
 	// 여기에서 try/catch 사용하지 않으면 client socket reset시 무한 루프에 빠짐
 	// TimeoutException 이 발생할수도 있다.
-	// TODO. test : SOCKET_BUFFER를 작게하고 SOCKET_BUFFER보다 큰 패킷이 왔을때 어떻게 되는가 ---> 처리해야함
-	// 이럴경우 여러번 이곳이 호출되는가?? 아니면?????
 
 	pNotification->release();
 
@@ -117,8 +101,6 @@ void GameSession::onShutdown(Poco::Net::ShutdownNotification* pNotification)
 void GameSession::onWritable(Poco::Net::WritableNotification* pNotification)
 {
 	//Application::instance().logger().information("onWritable called");
-//	std::string data = Poco::format("received %s", _data);
-//	_socket.sendBytes(data.data(), data.length());
 
 	pNotification->release();
 
@@ -137,6 +119,8 @@ void GameSession::onWritable(Poco::Net::WritableNotification* pNotification)
 			}
 			else
 			{
+				UTIL::Log("onWritable --> %d : %ld", sent, guid);
+
 				totalsent += sent;
 				if (totalsent < _sendsize)
 					_sendsize -= sent;
@@ -145,7 +129,7 @@ void GameSession::onWritable(Poco::Net::WritableNotification* pNotification)
 			}
 		}
 
-		//_reactor.removeEventHandler(_socket, Poco::Observer<GameSession, WritableNotification>(*this, &GameSession::onWritable));
+		_reactor.removeEventHandler(_socket, Poco::Observer<GameSession, WritableNotification>(*this, &GameSession::onWritable));
 
 // 		_reactor.removeEventHandler(_socket, NObserver<GameSession, WritableNotification>(*this, &GameSession::onWritable));
 // 		if (_onTimeoutAdded) {
@@ -171,13 +155,13 @@ void GameSession::onWritable(Poco::Net::WritableNotification* pNotification)
 void GameSession::onError(Poco::Net::ErrorNotification* pNotification)
 {
 	pNotification->release();
-	Application::instance().logger().information("onError called");
+	UTIL::Log("onError called");
 }
 
 void GameSession::onTimeout(Poco::Net::TimeoutNotification* pNotification)
 {
 	pNotification->release();
-	Application::instance().logger().information("onTimeout called");
+	UTIL::Log("onTimeout called");
 
 	// check alive
 // 	_sendsize = 0;
@@ -188,22 +172,50 @@ void GameSession::onTimeout(Poco::Net::TimeoutNotification* pNotification)
 void GameSession::onIdle(Poco::Net::IdleNotification* pNotification)
 {
 	pNotification->release();
-	Application::instance().logger().information("onIdle called");
+	UTIL::Log("onIdle called");
+}
+
+void GameSession::sendProtoBuffer(int packetid, const google::protobuf::Message& pb)
+{
+	int pbsize = pb.ByteSize();
+
+	PacketHeader header;
+	header.signature = SERVER_SIG;
+	header.packetsize = pbsize + sizeof(PacketHeader);		// packet size는 header + data 포함한 전체 길이
+	header.packetserial = packetSerial;
+	header.packetID = packetid;
+
+	memcpy(sendBuf, &header, sizeof(PacketHeader));
+	if (!pb.SerializePartialToArray(sendBuf + sizeof(PacketHeader), pbsize))
+	{
+		UTIL::Log("GameSession::sendBuffer -> SerializePartialToArray : Fail");
+		return;
+	}
+
+	_sendsize = header.packetsize;
+
+	_reactor.addEventHandler(_socket, Observer<GameSession, WritableNotification>(*this, &GameSession::onWritable));
+	writableAdded = true;
+	packetSerial++;
 
 }
 
 void GameSession::sendBuffer(int packetid, char *buf, int size)
 {
-	int packetlen = size + sizeof(int) + sizeof(uint32_t);
+	PacketHeader header;
+	header.signature = SERVER_SIG;
+	header.packetsize = size + sizeof(PacketHeader);
+	header.packetserial = packetSerial;
+	header.packetID = packetid;
 
-	memcpy(sendBuf, &packetlen, sizeof(int));
-	memcpy(sendBuf + sizeof(int), &packetid, sizeof(uint32_t));
-	memcpy(sendBuf+sizeof(int)+sizeof(uint32_t), buf, size);
+	memcpy(sendBuf, &header, sizeof(PacketHeader));
+	memcpy(sendBuf+sizeof(PacketHeader), buf, size);
 
-	_sendsize = packetlen;
+	_sendsize = header.packetsize;
 
-	_reactor.removeEventHandler(_socket, Poco::Observer<GameSession, WritableNotification>(*this, &GameSession::onWritable));
+	_reactor.addEventHandler(_socket, Observer<GameSession, WritableNotification>(*this, &GameSession::onWritable));
 	writableAdded = true;
+	packetSerial++;
 }
 
 // Packet type에 따른 parser func를 func pointer 연결해야 함
@@ -216,7 +228,6 @@ bool GameSession::parsePacket()
 	3. 헤더의 내용에 문제가 없나? --> 아니면 disconnect
 	3. 패킷의 크기만큼 받았나? --> 해당 패킷 완료
 	4. 남은것이 있는가??
-
 */
 
 	while (true)
@@ -269,7 +280,7 @@ bool GameSession::checkPacketHeader(PacketHeader *header)
 	if (header == nullptr) return false;
 
 	// 클라이언트용이 아님?? 그럼 끝
-	if (header->signature != (char)CLIENT_SIG)
+	if (header->signature != CLIENT_SIG)
 	{
 		//Log::instance()->LogError("Wrong Header sig : %x", header->signature);
 		return false;

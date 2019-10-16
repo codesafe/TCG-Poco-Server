@@ -2,7 +2,7 @@
 
 #include "Predef.h"
 
-#if 0
+#if 1
 
 class DBManager
 {

@@ -102,7 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../dep/include;../dep/include/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../dep/include;../dep/include/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -151,13 +151,17 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../dep/lib/poco/mt</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\md5.cpp" />
+    <ClCompile Include="Common\Sha256.cpp" />
     <ClCompile Include="DataBufferPool.cpp" />
     <ClCompile Include="DBManager.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="LoginServer.cpp" />
+    <ClCompile Include="MySQLSessionPool.cpp" />
     <ClCompile Include="Packet.h" />
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="pb\packet.pb.cc" />
@@ -167,10 +171,14 @@
     <ClCompile Include="WorldServer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\md5.h" />
+    <ClInclude Include="Common\Sha256.h" />
+    <ClInclude Include="Common\Util.h" />
     <ClInclude Include="DataBufferPool.h" />
     <ClInclude Include="DBManager.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="LoginServer.h" />
+    <ClInclude Include="MySQLSessionPool.h" />
     <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="pb\packet.pb.h" />
     <ClInclude Include="pb\packet_def.pb.h" />

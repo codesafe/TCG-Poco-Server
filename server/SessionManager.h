@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SESSION_MANAGER
+#define SESSION_MANAGER
 
 #include "Predef.h"
 #include <vector>
@@ -13,7 +14,7 @@ class GameSession;
 	https://pocoproject.org/slides/145-Hashing.pdf
 */
 
-class Session
+class _Session
 {
 public :
 	enum SessionState
@@ -23,11 +24,13 @@ public :
 		Disconnected
 	};
 
-	Session(long guid, GameSession *handler);
-	~Session();
+	_Session(USER_GUID guid, GameSession *handler);
+	~_Session();
 
 	SessionState getState();
 	void setState(SessionState state);
+
+	void sendProtoBuffer(const int packetID, const google::protobuf::Message& pb);
 	void sendPacket(const int packetID, char *buf, int size);
 
 private:
@@ -35,6 +38,8 @@ private:
 	GameSession *handler;
 	long guid;
 };
+
+//////////////////////////////////////////////////////////////////////////
 
 class SessionManager
 {
@@ -49,13 +54,15 @@ public :
 	}
 
 
-	long addSession(GameSession *handler);
+	USER_GUID addSession(GameSession *handler);
 	bool removeSession(USER_GUID guid);
 	// Needs readlock at outside usage.
-	Session * findSession(USER_GUID guid);
+	_Session * findSession(USER_GUID guid);
 
 	bool broadCastAllSession(int packetID, char *buf, int size);
 	void disconnnectSession(USER_GUID guid);
+
+	void sendProtoBuffer(USER_GUID guid, int packetID, const google::protobuf::Message& pb);
 	void sendBuffer(USER_GUID guid, int packetID, char *buf, int buflen);
 
 	void lock(bool readlock);
@@ -66,10 +73,10 @@ private:
 #ifdef USE_STL
 	std::map<USER_GUID, GameSession*>	sessionList;
 #else
-	Poco::HashMap<USER_GUID, Session*>	sessionMap;
+	Poco::HashMap<USER_GUID, _Session*>	sessionMap;
 #endif
 
-	long userGuid;
+	USER_GUID userGuid;
 
 	Poco::RWLock _lock;
 
@@ -81,3 +88,5 @@ private :
 	static SessionManager * _instance;
 };
 
+
+#endif
