@@ -4,6 +4,13 @@
 syntax = "proto3";
 import "packet_def.proto";
 
+//////////////////////////////////////////////////////////////////	Connect
+
+message AckConnectInfo
+{ 
+	int64  encode_seed = 1;
+}
+
 //////////////////////////////////////////////////////////////////	Login
 
 message ReqLogin
@@ -28,7 +35,7 @@ message ReqCreateAccount
 
 message AckCreateAccount
 {
-	bool	result = 1;
+	RetCreateAccount	result = 1;
 }
 
 
