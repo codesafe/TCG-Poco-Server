@@ -158,7 +158,7 @@
     <ClCompile Include="Common\md5.cpp" />
     <ClCompile Include="Common\Sha256.cpp" />
     <ClCompile Include="DataBufferPool.cpp" />
-    <ClCompile Include="DBManager.cpp" />
+    <ClCompile Include="RedisManager.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="LoginServer.cpp" />
     <ClCompile Include="MySQLSessionPool.cpp" />
@@ -168,14 +168,14 @@
     <ClCompile Include="pb\packet_def.pb.cc" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="SessionManager.cpp" />
-    <ClCompile Include="WorldServer.cpp" />
+    <ClCompile Include="PlayRoomManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\md5.h" />
     <ClInclude Include="Common\Sha256.h" />
     <ClInclude Include="Common\Util.h" />
     <ClInclude Include="DataBufferPool.h" />
-    <ClInclude Include="DBManager.h" />
+    <ClInclude Include="RedisManager.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="LoginServer.h" />
     <ClInclude Include="MySQLSessionPool.h" />
@@ -185,7 +185,7 @@
     <ClInclude Include="Predef.h" />
     <ClInclude Include="SessionManager.h" />
     <ClInclude Include="SocketBuffer.h" />
-    <ClInclude Include="WorldServer.h" />
+    <ClInclude Include="PlayRoomManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

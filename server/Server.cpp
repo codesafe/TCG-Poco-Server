@@ -25,7 +25,7 @@ protected:
 			";secure-auth=true"
 			";protocol=tcp";
 
-		return MySQLSessionPool::getInstance()->init("MySQL", dbConnString, 1, 5, 10);
+		return MySQLSessionPool::getInstance()->init("MySQL", dbConnString, 1, 30, 10);
 	}
 
 	int main(const std::vector<std::string>& args)

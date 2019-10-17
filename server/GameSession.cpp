@@ -1,8 +1,8 @@
 #include "GameSession.h"
 #include "SessionManager.h"
 #include "LoginServer.h"
-#include "WorldServer.h"
-#include "DBManager.h"
+#include "PlayRoomManager.h"
+#include "RedisManager.h"
 #include "PacketHandler.h"
 
 #include "DataBufferPool.h"
@@ -282,7 +282,7 @@ bool GameSession::checkPacketHeader(PacketHeader *header)
 	// 클라이언트용이 아님?? 그럼 끝
 	if (header->signature != CLIENT_SIG)
 	{
-		//Log::instance()->LogError("Wrong Header sig : %x", header->signature);
+		UTIL::Log("Wrong Header sig : %d", header->signature);
 		return false;
 	}
 

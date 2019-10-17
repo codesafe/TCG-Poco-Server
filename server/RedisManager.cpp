@@ -1,24 +1,23 @@
-#if 1
 
-#include "DBManager.h"
+#include "RedisManager.h"
 
 using Poco::Redis::Client;
 using Poco::Redis::Array;
 using Poco::Redis::Command;
 
-DBManager *DBManager::_instance = nullptr;
+RedisManager *RedisManager::_instance = nullptr;
 
-DBManager::DBManager() : isconnected(false)
+RedisManager::RedisManager() : isconnected(false)
 {
 
 }
 
-DBManager::~DBManager()
+RedisManager::~RedisManager()
 {
 	client.disconnect();
 }
 
-bool DBManager::init(const std::string& host, int port)
+bool RedisManager::init(const std::string& host, int port)
 {
 	if (isconnected) return true;
 
@@ -29,7 +28,7 @@ bool DBManager::init(const std::string& host, int port)
 	return true;
 }
 
-bool DBManager::authRedis(const std::string& pw)
+bool RedisManager::authRedis(const std::string& pw)
 {
 	Array cmd;
 	cmd << "AUTH" << pw;
@@ -47,7 +46,7 @@ bool DBManager::authRedis(const std::string& pw)
 	return (response == "OK");
 }
 
-bool DBManager::sendCommand(const std::string& command)
+bool RedisManager::sendCommand(const std::string& command)
 {
 	//HSETNX GUID 1 12
 
@@ -77,7 +76,7 @@ bool DBManager::sendCommand(const std::string& command)
 	return true;
 }
 
-Poco::Redis::BulkString DBManager::getFromHashTBL(const std::string& tbl, const std::string& key)
+Poco::Redis::BulkString RedisManager::getFromHashTBL(const std::string& tbl, const std::string& key)
 {
 	Application& app = Application::instance();
 
@@ -107,4 +106,3 @@ Poco::Redis::BulkString DBManager::getFromHashTBL(const std::string& tbl, const 
 	return response;
 }
 
-#endif

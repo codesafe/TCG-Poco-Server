@@ -1,5 +1,8 @@
 #pragma once
 
+
+/*
+
 #include "Predef.h"
 
 struct SocketBuffer
@@ -18,3 +21,4 @@ struct SocketBuffer
 	char buffer[SOCKET_BUFFER];
 };
 
+*/

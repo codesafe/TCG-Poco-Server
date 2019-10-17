@@ -131,7 +131,10 @@ using namespace google;
 // Session
 #define SOCKET_BUFFER	4096 * 2
 #define USER_GUID		long
+#define PLAYROOM_ID		long
 
+// Data buffer poo;
+#define DEFAULT_BUFFER_POOL		3000
 
 // DataBase
 #define MYSQL_USER "root"

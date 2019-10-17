@@ -2,16 +2,15 @@
 
 #include "Predef.h"
 
-#if 1
 
-class DBManager
+class RedisManager
 {
 public :
-	static DBManager * getInstance()
+	static RedisManager * getInstance()
 	{
 		if (_instance == nullptr)
 		{
-			_instance = new DBManager();
+			_instance = new RedisManager();
 		}
 		return _instance;
 	}
@@ -26,10 +25,9 @@ private :
 	Poco::Redis::Client client;
 
 private :
-	DBManager();
-	~DBManager();
+	RedisManager();
+	~RedisManager();
 
-	static DBManager *_instance;
+	static RedisManager *_instance;
 	bool	isconnected;
 };
-#endif

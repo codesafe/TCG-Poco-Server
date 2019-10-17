@@ -46,7 +46,6 @@ bool DataBuff::copyData(char *data, int size)
 void DataBuff::release()
 {
 	buffersize = 0;
-	DataBufferManager::getInstance()->releaseBuffer(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -99,6 +98,7 @@ DataBuff *DataBufferPool::allocBuffer()
 bool DataBufferPool::releaseBuffer(DataBuff *buff)
 {
 	bufferlock.lock();
+	buff->release();
 	bufferpool.push_front(buff);
 	bufferlock.unlock();
 	return true;
@@ -190,7 +190,7 @@ DataBufferManager * DataBufferManager::_instance = nullptr;
 
 DataBufferManager::DataBufferManager()
 {
-
+	databufferpool.init(DEFAULT_BUFFER_POOL);
 }
 
 DataBufferManager::~DataBufferManager()

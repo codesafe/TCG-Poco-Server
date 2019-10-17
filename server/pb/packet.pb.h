@@ -31,6 +31,9 @@
 #include <google/protobuf/unknown_field_set.h>
 #include "packet_def.pb.h"
 // @@protoc_insertion_point(includes)
+class AckConnectInfo;
+class AckConnectInfoDefaultTypeInternal;
+extern AckConnectInfoDefaultTypeInternal _AckConnectInfo_default_instance_;
 class AckCreateAccount;
 class AckCreateAccountDefaultTypeInternal;
 extern AckCreateAccountDefaultTypeInternal _AckCreateAccount_default_instance_;
@@ -60,6 +63,103 @@ void InitDefaults();
 }  // namespace protobuf_packet_2eproto
 
 // ===================================================================
+
+class AckConnectInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:AckConnectInfo) */ {
+ public:
+  AckConnectInfo();
+  virtual ~AckConnectInfo();
+
+  AckConnectInfo(const AckConnectInfo& from);
+
+  inline AckConnectInfo& operator=(const AckConnectInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  AckConnectInfo(AckConnectInfo&& from) noexcept
+    : AckConnectInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline AckConnectInfo& operator=(AckConnectInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AckConnectInfo& default_instance();
+
+  static inline const AckConnectInfo* internal_default_instance() {
+    return reinterpret_cast<const AckConnectInfo*>(
+               &_AckConnectInfo_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(AckConnectInfo* other);
+  friend void swap(AckConnectInfo& a, AckConnectInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline AckConnectInfo* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AckConnectInfo* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const AckConnectInfo& from);
+  void MergeFrom(const AckConnectInfo& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(AckConnectInfo* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 encode_seed = 1;
+  void clear_encode_seed();
+  static const int kEncodeSeedFieldNumber = 1;
+  ::google::protobuf::int64 encode_seed() const;
+  void set_encode_seed(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:AckConnectInfo)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int64 encode_seed_;
+  mutable int _cached_size_;
+  friend struct protobuf_packet_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
 
 class ReqLogin : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ReqLogin) */ {
  public:
@@ -95,7 +195,7 @@ class ReqLogin : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_ReqLogin_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
+    1;
 
   void Swap(ReqLogin* other);
   friend void swap(ReqLogin& a, ReqLogin& b) {
@@ -215,7 +315,7 @@ class AckLogin : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_AckLogin_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    2;
 
   void Swap(AckLogin* other);
   friend void swap(AckLogin& a, AckLogin& b) {
@@ -319,7 +419,7 @@ class ReqCreateAccount : public ::google::protobuf::Message /* @@protoc_insertio
                &_ReqCreateAccount_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(ReqCreateAccount* other);
   friend void swap(ReqCreateAccount& a, ReqCreateAccount& b) {
@@ -439,7 +539,7 @@ class AckCreateAccount : public ::google::protobuf::Message /* @@protoc_insertio
                &_AckCreateAccount_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(AckCreateAccount* other);
   friend void swap(AckCreateAccount& a, AckCreateAccount& b) {
@@ -486,17 +586,17 @@ class AckCreateAccount : public ::google::protobuf::Message /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // bool result = 1;
+  // .RetCreateAccount result = 1;
   void clear_result();
   static const int kResultFieldNumber = 1;
-  bool result() const;
-  void set_result(bool value);
+  ::RetCreateAccount result() const;
+  void set_result(::RetCreateAccount value);
 
   // @@protoc_insertion_point(class_scope:AckCreateAccount)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool result_;
+  int result_;
   mutable int _cached_size_;
   friend struct protobuf_packet_2eproto::TableStruct;
 };
@@ -510,6 +610,24 @@ class AckCreateAccount : public ::google::protobuf::Message /* @@protoc_insertio
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// AckConnectInfo
+
+// int64 encode_seed = 1;
+inline void AckConnectInfo::clear_encode_seed() {
+  encode_seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 AckConnectInfo::encode_seed() const {
+  // @@protoc_insertion_point(field_get:AckConnectInfo.encode_seed)
+  return encode_seed_;
+}
+inline void AckConnectInfo::set_encode_seed(::google::protobuf::int64 value) {
+  
+  encode_seed_ = value;
+  // @@protoc_insertion_point(field_set:AckConnectInfo.encode_seed)
+}
+
+// -------------------------------------------------------------------
+
 // ReqLogin
 
 // bytes name = 1;
@@ -764,15 +882,15 @@ inline void ReqCreateAccount::set_allocated_passwd(::std::string* passwd) {
 
 // AckCreateAccount
 
-// bool result = 1;
+// .RetCreateAccount result = 1;
 inline void AckCreateAccount::clear_result() {
-  result_ = false;
+  result_ = 0;
 }
-inline bool AckCreateAccount::result() const {
+inline ::RetCreateAccount AckCreateAccount::result() const {
   // @@protoc_insertion_point(field_get:AckCreateAccount.result)
-  return result_;
+  return static_cast< ::RetCreateAccount >(result_);
 }
-inline void AckCreateAccount::set_result(bool value) {
+inline void AckCreateAccount::set_result(::RetCreateAccount value) {
   
   result_ = value;
   // @@protoc_insertion_point(field_set:AckCreateAccount.result)
@@ -782,6 +900,8 @@ inline void AckCreateAccount::set_result(bool value) {
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -16,6 +16,11 @@
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
+class AckConnectInfoDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<AckConnectInfo>
+     _instance;
+} _AckConnectInfo_default_instance_;
 class ReqLoginDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<ReqLogin>
@@ -42,7 +47,7 @@ namespace protobuf_packet_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[4];
+::google::protobuf::Metadata file_level_metadata[5];
 
 }  // namespace
 
@@ -61,9 +66,16 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AckConnectInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AckConnectInfo, encode_seed_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReqLogin, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -93,13 +105,15 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_ATTRIBUTE_SECTION
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AckCreateAccount, result_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(ReqLogin)},
-  { 7, -1, sizeof(AckLogin)},
-  { 14, -1, sizeof(ReqCreateAccount)},
-  { 21, -1, sizeof(AckCreateAccount)},
+  { 0, -1, sizeof(AckConnectInfo)},
+  { 6, -1, sizeof(ReqLogin)},
+  { 13, -1, sizeof(AckLogin)},
+  { 20, -1, sizeof(ReqCreateAccount)},
+  { 27, -1, sizeof(AckCreateAccount)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&_AckConnectInfo_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ReqLogin_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_AckLogin_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ReqCreateAccount_default_instance_),
@@ -124,7 +138,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 5);
 }
 
 }  // namespace
@@ -133,7 +147,9 @@ void TableStruct::InitDefaultsImpl() {
 
   ::google::protobuf::internal::InitProtobufDefaults();
   ::protobuf_packet_5fdef_2eproto::InitDefaults();
-  _ReqLogin_default_instance_._instance.DefaultConstruct();
+  _AckConnectInfo_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_AckConnectInfo_default_instance_);_ReqLogin_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_ReqLogin_default_instance_);_AckLogin_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -151,15 +167,17 @@ namespace {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\014packet.proto\032\020packet_def.proto\"(\n\010ReqL"
-      "ogin\022\014\n\004name\030\001 \001(\014\022\016\n\006passwd\030\002 \001(\014\"\?\n\010Ac"
-      "kLogin\022\031\n\006result\030\001 \001(\0162\t.RetLogin\022\030\n\005err"
-      "or\030\002 \001(\0162\t.RetError\"0\n\020ReqCreateAccount\022"
-      "\014\n\004name\030\001 \001(\t\022\016\n\006passwd\030\002 \001(\t\"\"\n\020AckCrea"
-      "teAccount\022\016\n\006result\030\001 \001(\010b\006proto3"
+      "\n\014packet.proto\032\020packet_def.proto\"%\n\016AckC"
+      "onnectInfo\022\023\n\013encode_seed\030\001 \001(\003\"(\n\010ReqLo"
+      "gin\022\014\n\004name\030\001 \001(\014\022\016\n\006passwd\030\002 \001(\014\"\?\n\010Ack"
+      "Login\022\031\n\006result\030\001 \001(\0162\t.RetLogin\022\030\n\005erro"
+      "r\030\002 \001(\0162\t.RetError\"0\n\020ReqCreateAccount\022\014"
+      "\n\004name\030\001 \001(\t\022\016\n\006passwd\030\002 \001(\t\"5\n\020AckCreat"
+      "eAccount\022!\n\006result\030\001 \001(\0162\021.RetCreateAcco"
+      "untb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 233);
+      descriptor, 291);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "packet.proto", &protobuf_RegisterTypes);
   ::protobuf_packet_5fdef_2eproto::AddDescriptors();
@@ -179,6 +197,260 @@ struct StaticDescriptorInitializer {
 
 }  // namespace protobuf_packet_2eproto
 
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AckConnectInfo::kEncodeSeedFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AckConnectInfo::AckConnectInfo()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_packet_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:AckConnectInfo)
+}
+AckConnectInfo::AckConnectInfo(const AckConnectInfo& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  encode_seed_ = from.encode_seed_;
+  // @@protoc_insertion_point(copy_constructor:AckConnectInfo)
+}
+
+void AckConnectInfo::SharedCtor() {
+  encode_seed_ = GOOGLE_LONGLONG(0);
+  _cached_size_ = 0;
+}
+
+AckConnectInfo::~AckConnectInfo() {
+  // @@protoc_insertion_point(destructor:AckConnectInfo)
+  SharedDtor();
+}
+
+void AckConnectInfo::SharedDtor() {
+}
+
+void AckConnectInfo::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* AckConnectInfo::descriptor() {
+  protobuf_packet_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_packet_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const AckConnectInfo& AckConnectInfo::default_instance() {
+  protobuf_packet_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AckConnectInfo* AckConnectInfo::New(::google::protobuf::Arena* arena) const {
+  AckConnectInfo* n = new AckConnectInfo;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AckConnectInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:AckConnectInfo)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  encode_seed_ = GOOGLE_LONGLONG(0);
+  _internal_metadata_.Clear();
+}
+
+bool AckConnectInfo::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:AckConnectInfo)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 encode_seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &encode_seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:AckConnectInfo)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:AckConnectInfo)
+  return false;
+#undef DO_
+}
+
+void AckConnectInfo::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:AckConnectInfo)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 encode_seed = 1;
+  if (this->encode_seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->encode_seed(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:AckConnectInfo)
+}
+
+::google::protobuf::uint8* AckConnectInfo::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:AckConnectInfo)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 encode_seed = 1;
+  if (this->encode_seed() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(1, this->encode_seed(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AckConnectInfo)
+  return target;
+}
+
+size_t AckConnectInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AckConnectInfo)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // int64 encode_seed = 1;
+  if (this->encode_seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->encode_seed());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AckConnectInfo::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:AckConnectInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  const AckConnectInfo* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const AckConnectInfo>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:AckConnectInfo)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:AckConnectInfo)
+    MergeFrom(*source);
+  }
+}
+
+void AckConnectInfo::MergeFrom(const AckConnectInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:AckConnectInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.encode_seed() != 0) {
+    set_encode_seed(from.encode_seed());
+  }
+}
+
+void AckConnectInfo::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:AckConnectInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AckConnectInfo::CopyFrom(const AckConnectInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AckConnectInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AckConnectInfo::IsInitialized() const {
+  return true;
+}
+
+void AckConnectInfo::Swap(AckConnectInfo* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AckConnectInfo::InternalSwap(AckConnectInfo* other) {
+  using std::swap;
+  swap(encode_seed_, other->encode_seed_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata AckConnectInfo::GetMetadata() const {
+  protobuf_packet_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_packet_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AckConnectInfo
+
+// int64 encode_seed = 1;
+void AckConnectInfo::clear_encode_seed() {
+  encode_seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 AckConnectInfo::encode_seed() const {
+  // @@protoc_insertion_point(field_get:AckConnectInfo.encode_seed)
+  return encode_seed_;
+}
+void AckConnectInfo::set_encode_seed(::google::protobuf::int64 value) {
+  
+  encode_seed_ = value;
+  // @@protoc_insertion_point(field_set:AckConnectInfo.encode_seed)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
@@ -1336,7 +1608,7 @@ AckCreateAccount::AckCreateAccount(const AckCreateAccount& from)
 }
 
 void AckCreateAccount::SharedCtor() {
-  result_ = false;
+  result_ = 0;
   _cached_size_ = 0;
 }
 
@@ -1377,7 +1649,7 @@ void AckCreateAccount::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  result_ = false;
+  result_ = 0;
   _internal_metadata_.Clear();
 }
 
@@ -1391,14 +1663,15 @@ bool AckCreateAccount::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bool result = 1;
+      // .RetCreateAccount result = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
-
+          int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &result_)));
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_result(static_cast< ::RetCreateAccount >(value));
         } else {
           goto handle_unusual;
         }
@@ -1431,9 +1704,10 @@ void AckCreateAccount::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool result = 1;
+  // .RetCreateAccount result = 1;
   if (this->result() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->result(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->result(), output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1450,9 +1724,10 @@ void AckCreateAccount::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool result = 1;
+  // .RetCreateAccount result = 1;
   if (this->result() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->result(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->result(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1472,9 +1747,10 @@ size_t AckCreateAccount::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // bool result = 1;
+  // .RetCreateAccount result = 1;
   if (this->result() != 0) {
-    total_size += 1 + 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->result());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1548,15 +1824,15 @@ void AckCreateAccount::InternalSwap(AckCreateAccount* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // AckCreateAccount
 
-// bool result = 1;
+// .RetCreateAccount result = 1;
 void AckCreateAccount::clear_result() {
-  result_ = false;
+  result_ = 0;
 }
-bool AckCreateAccount::result() const {
+::RetCreateAccount AckCreateAccount::result() const {
   // @@protoc_insertion_point(field_get:AckCreateAccount.result)
-  return result_;
+  return static_cast< ::RetCreateAccount >(result_);
 }
-void AckCreateAccount::set_result(bool value) {
+void AckCreateAccount::set_result(::RetCreateAccount value) {
   
   result_ = value;
   // @@protoc_insertion_point(field_set:AckCreateAccount.result)

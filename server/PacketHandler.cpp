@@ -66,7 +66,55 @@ bool PacketHandler::dispatchPacket(int packetid, char *buf, int buflen, USER_GUI
 
 bool PacketHandler::onCreateAccountReq(const char* buf, const int buflen, const USER_GUID& sessionID)
 {
+	RetCreateAccount result_code = RET_CREATE_SUCCESS;
 
+	protobuf::io::ArrayInputStream is(buf, buflen);
+	is.Skip(sizeof(PacketHeader));
+
+	ReqCreateAccount creataccount;
+	creataccount.ParseFromZeroCopyStream(&is);
+
+	std::string name = creataccount.name();
+	std::string pass = creataccount.passwd();
+
+	std::string querystr1 = "select count(*) from account where name = ?";
+	std::string querystr2 = "insert into account (name, password) values(?, ?)";
+
+	try
+	{
+		Poco::Data::Session sess(MySQLSessionPool::getInstance()->getSessionPool()->get());
+		if (sess.isConnected())
+		{
+			int count = 0;
+			sess << querystr1, into(count), use(name), now;
+			if (count > 0)
+			{
+				result_code = RET_EXIST_ACCOUNT_FAIL;
+			}
+			else
+				sess << querystr2, use(name), use(pass), now;
+		}
+		else
+		{
+			UTIL::Log("*** Connected to DB failed");
+			result_code = RET_EXIST_ACCOUNT_FAIL;
+		}
+	}
+	catch (ConnectionException& ce)
+	{
+		UTIL::Log(ce.displayText());
+	}
+	catch (StatementException& se)
+	{
+		UTIL::Log(se.displayText());
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	AckCreateAccount ack;
+	ack.set_result(result_code);
+
+	SessionManager::getInstance()->sendProtoBuffer(sessionID, GameMsgID::MSG_ACK_CREATE_ACCOUNT, ack);
 
 	return true;
 }
@@ -82,11 +130,15 @@ bool PacketHandler::onLoginReq(const char* buf, const int buflen, const USER_GUI
 	std::string name = login.name();
 	std::string pass = login.passwd();
 
+	RetLogin result_code = RET_LOGIN_FAIL;
+	RetError error_code = RET_ERR_NOERROR;
+
 	//////////////////////////////////////////////////////////////////////////
 
-	std::string querystr = "select * from account where name = ?";
+	std::string querystr1 = "select count(*) from account where name = ?";
+	std::string querystr2 = "select * from account where name = ?";
 
-	USER_GUID ret_gsn;
+	USER_GUID ret_gsn = -1;
 	std::string ret_name;
 	std::string ret_pass;
 
@@ -95,12 +147,28 @@ bool PacketHandler::onLoginReq(const char* buf, const int buflen, const USER_GUI
 		Poco::Data::Session sess(MySQLSessionPool::getInstance()->getSessionPool()->get());
 		if (sess.isConnected())
 		{
-			//Packet_LOGIN login;
-			//sess << querystr, into(login), use(name), now;
-			sess << querystr, into(ret_gsn), into(ret_name), into(ret_pass), use(name), now;
+			int count = 0;
+			sess << querystr1, into(count), use(name), now;
+			if (count > 0)
+			{
+				//Packet_LOGIN login;
+				//sess << querystr, into(login), use(name), now;
+				sess << querystr2, into(ret_gsn), into(ret_name), into(ret_pass), use(name), now;
+
+				if (pass == ret_pass)
+					result_code = RET_LOGIN_SUCCESS;
+				else
+					result_code = RET_LOGIN_WRONGPASS;
+
+			}
+			else
+				result_code = RET_LOGIN_NEED_CREATE_USER;
 		}
 		else
+		{
 			UTIL::Log("*** Connected to DB failed");
+			result_code = RET_LOGIN_FAIL;
+		}
 	}
 	catch (ConnectionException& ce)
 	{
@@ -114,10 +182,8 @@ bool PacketHandler::onLoginReq(const char* buf, const int buflen, const USER_GUI
 	//////////////////////////////////////////////////////////////////////////
 
 	AckLogin ack;
-	if( pass == ret_pass )
-		ack.set_result(RET_LOGIN_SUCCESS);
-	else
-		ack.set_result(RET_LOGIN_WRONGPASS);
+	ack.set_result(result_code);
+	ack.set_error(error_code);
 
 	SessionManager::getInstance()->sendProtoBuffer(sessionID, GameMsgID::MSG_ACK_LOGIN, ack);
 

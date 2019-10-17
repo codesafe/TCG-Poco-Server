@@ -47,6 +47,8 @@ private:
 
 	USER_GUID		guid;
 	unsigned long	packetSerial;
+
+
 };
 
 #endif
